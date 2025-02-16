@@ -15,6 +15,7 @@
       </div>
       <audio-dropzone :playlist="playlist" />
       <div v-if="settings.showFPS" class="vis__fps">{{ visualizer.fps }}</div>
+      <projector-visualizer :audioData="analyzer.getData()" />
     </template>
     <modal :show="showWelcome" @click="hideWelcome">
       <div class="vis__welcome">
@@ -62,6 +63,7 @@ import DonateForm from '@/components/DonateForm'
 import Modal from '@/components/Modal'
 import NavBar from '@/components/NavBar'
 import VisSettings from '@/components/VisSettings'
+import ProjectorVisualizer from '@/components/ProjectorVisualizer'
 
 import AudioAnalyzer from '@/js/AudioAnalyzer'
 import Microphone from '@/js/Microphone'
@@ -255,7 +257,8 @@ export default {
     DonateForm,
     Modal,
     NavBar,
-    VisSettings
+    VisSettings,
+    ProjectorVisualizer
   }
 }
 </script>

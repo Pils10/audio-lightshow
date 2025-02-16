@@ -190,6 +190,17 @@ export default class extends Visualizer {
     ctx.restore()
   }
 
+  drawProjectorBeams(ctx, data) {
+    const beamCount = 10;
+    const beamWidth = this.canvas.width / beamCount;
+    const maxBeamHeight = this.canvas.height;
+    for (let i = 0; i < beamCount; i++) {
+      const beamHeight = (data[0].freq[i] / 255) * maxBeamHeight;
+      ctx.fillStyle = `rgba(255, 255, 255, ${data[0].freq[i] / 255})`;
+      ctx.fillRect(i * beamWidth, this.canvas.height - beamHeight, beamWidth, beamHeight);
+    }
+  }
+
   resize() {
     super.resize()
     this.buffer.width = this.canvas.width
@@ -237,6 +248,9 @@ export default class extends Visualizer {
     // draw white
     this.drawInner(ctx, data, bass, true)
     this.drawOuter(ctx, data, bass, true)
+
+    // draw projector beams
+    this.drawProjectorBeams(ctx, data)
   }
 
   destroy() {
