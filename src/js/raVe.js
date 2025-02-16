@@ -201,6 +201,43 @@ export default class extends Visualizer {
     }
   }
 
+  drawMovingPoints(ctx, data) {
+    const pointCount = 50;
+    const maxPointSize = 10;
+    const maxSpeed = 5;
+    const points = [];
+
+    for (let i = 0; i < pointCount; i++) {
+      points.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        size: Math.random() * maxPointSize,
+        speedX: (Math.random() - 0.5) * maxSpeed,
+        speedY: (Math.random() - 0.5) * maxSpeed,
+        color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`
+      });
+    }
+
+    points.forEach(point => {
+      point.x += point.speedX;
+      point.y += point.speedY;
+
+      if (point.x < 0 || point.x > this.canvas.width) point.speedX *= -1;
+      if (point.y < 0 || point.y > this.canvas.height) point.speedY *= -1;
+
+      const scale = 1 + (data[0].freq[0] / 255);
+      point.size *= scale;
+
+      const colorChange = Math.floor((data[0].freq[0] / 255) * 255);
+      point.color = `rgb(${colorChange}, ${colorChange}, ${colorChange})`;
+
+      ctx.fillStyle = point.color;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, point.size, 0, tau);
+      ctx.fill();
+    });
+  }
+
   resize() {
     super.resize()
     this.buffer.width = this.canvas.width
@@ -251,6 +288,9 @@ export default class extends Visualizer {
 
     // draw projector beams
     this.drawProjectorBeams(ctx, data)
+
+    // draw moving points
+    this.drawMovingPoints(ctx, data)
   }
 
   destroy() {
